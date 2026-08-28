@@ -2,7 +2,7 @@ const http = require("http");
 
 const PORT = process.env.PORT || 3000;
 
-let acionamentoPendente = false;
+let acionamentoPendente = null;
 
 const server = http.createServer((req, res) => {
   console.log(req.method, req.url);
@@ -64,6 +64,7 @@ const server = http.createServer((req, res) => {
 
           if (dados?.action === "order.processed") {
             acionamentoPendente = true;
+            pedidoPendente = dados?.data?.id || dados?.id || null;
             console.log("PAGAMENTO CONFIRMADO - ESP32 PENDENTE");
           }
         }
