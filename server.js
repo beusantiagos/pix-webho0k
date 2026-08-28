@@ -62,11 +62,7 @@ const server = http.createServer((req, res) => {
             0
           );
 
-          if (
-            dados?.action === "order.processed" &&
-            referencia.startsWith("CHAFARIZZ_") &&
-            valor === 1.50
-          ) {
+          if (dados?.action === "order.processed") {
             acionamentoPendente = true;
             console.log("PAGAMENTO CONFIRMADO - ESP32 PENDENTE");
           }
