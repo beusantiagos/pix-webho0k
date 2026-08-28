@@ -26,8 +26,15 @@ const server = http.createServer((req, res) => {
     }
     return;
   }
-
+if (req.method === "GET" && req.url === "/esp32/confirm") {
+  pedidoPendente = null;
+  console.log("ESP32 CONFIRMOU OS 6 PULSOS");
+  res.writeHead(200, { "Content-Type": "text/plain" });
+  res.end("OK");
+  return;
+}
   // Webhook do Mercado Pago
+  
   if (req.url.startsWith("/webhook")) {
 
     // Permite testar pelo navegador
