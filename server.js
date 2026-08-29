@@ -2,8 +2,31 @@ const http = require("http");
 
 const PORT = process.env.PORT || 3000;
 
-let acionamentoPendente = null;
-
+let acionamentoPendente = false;
+let timeoutReembolso = null;
+async function reembolsarPedido(orderId) {
+const token = process.env.MERCADO_PAGO_ACCESS_TOKEN;
+if (!token) { 
+console.log("ERRO: Access Token nao configurado");
+  return;
+}
+const url = `https://api.mercadopago.com/v1/orders/${orderId}/refund`;
+  try {
+    const resposta = await fetch(url, {
+      method: "POST".
+  headers: {
+  "Authorization": `Bearer ${token}`,
+  "Content-Type": "application/json",
+  "X-Idempotency-Key": `refund-${orderId}`
+}
+});
+    const texto = await resposta.text();
+    console.log("RESPOSTA REEMBOLSO:", resposta.status, texto);
+  } catch (erro) {
+    console.log("ERRO NO REEMBOLSO:", erro.message);
+  }
+}
+          
 const server = http.createServer((req, res) => {
   console.log(req.method, req.url);
 
