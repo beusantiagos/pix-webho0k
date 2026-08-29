@@ -50,6 +50,7 @@ const server = http.createServer((req, res) => {
     return;
   }
 if (req.method === "GET" && req.url === "/esp32/confirm") {
+  if (timeoutReembolso) clearTimeout(timeouReembolso);
   pedidoPendente = null;
   console.log("ESP32 CONFIRMOU OS 6 PULSOS");
   res.writeHead(200, { "Content-Type": "text/plain" });
@@ -92,9 +93,20 @@ if (req.method === "GET" && req.url === "/esp32/confirm") {
             0
           );
 
-          if (dados?.action === "order.processed") {
+           if (
+  dados?.action === "order.processed" &&
+  referencia.startsWith("CHAFARIZZ_") &&
+  valor === 1.50
+) {
             acionamentoPendente = true;
-            pedidoPendente = dados?.data?.id || dados?.id || null;
+            const parametros = new URL(req.url, "http://localhost");
+            pedidoPendente = parametros.searchParams.get("data.id") || dados?.data?.id || dados?.id || null;
+            if (timeoutReembolso) clearTimeout(timeoutReembolso);
+            timeoutReembolso = setTimeout(() => {
+            if (pedidoPendente) {
+            reembolsarPedido(pedidoPendente);
+            }
+            }, 60000);
             console.log("PAGAMENTO CONFIRMADO - ESP32 PENDENTE");
           }
         }
