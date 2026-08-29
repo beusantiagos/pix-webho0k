@@ -13,7 +13,7 @@ console.log("ERRO: Access Token nao configurado");
 const url = `https://api.mercadopago.com/v1/orders/${orderId}/refund`;
   try {
     const resposta = await fetch(url, {
-      method: "POST".
+      method: "POST",
   headers: {
   "Authorization": `Bearer ${token}`,
   "Content-Type": "application/json",
