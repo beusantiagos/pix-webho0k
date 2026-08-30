@@ -27,7 +27,7 @@ const url = `https://api.mercadopago.com/v1/orders/${orderId}/refund`;
   }
 }
           
-const server = http.createServer((req, res) => {
+const server = http.createServer(async (req, res) => {
   console.log(req.method, req.url);
 
   // Teste simples no navegador
