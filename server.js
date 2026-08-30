@@ -121,6 +121,63 @@ if (req.method === "GET" && req.url === "/esp32/confirm") {
     return;
   }
 
+  if (req.method === "GET" && req.url === "/criar-qr") {
+    const token = process.env.MERCADO_PAGO_ACCESS_TOKEN;
+
+  if (!token) {
+    res.writeHead(500, { "Content-Type": "text/plain" });
+    res.end("Access Token nao configurado");
+    return;
+  }
+    const referencia = `CHAFARIZZ_${Date.now()}`;
+
+  const pedido = {
+    type: "qr",
+    total_amount: "1.50",
+    external_reference: referencia,
+    config: {
+      qr: {
+        external_pos_id: "137110272",
+        mode: "static"
+      }
+    },
+    transactions: {
+      payments: [
+        {
+          amount: "1.50"
+        }
+      ]
+    },
+    items: [
+      {
+        title: "Chafariz",
+        unit_price: "1.50",
+        quantity: 1,
+        unit_measure: "unit"
+      }
+    ]
+  };
+    try {
+    const resposta = await fetch("https://api.mercadopago.com/v1/orders", {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${token}`,
+        "Content-Type": "application/json",
+        "X-Idempotency-Key": `qr-${Date.now()}`
+      },
+      body: JSON.stringify(pedido)
+    });
+
+    const texto = await resposta.text();
+      res.writeHead(resposta.status, { "Content-Type": "application/json" });
+    res.end(texto);
+    return;
+      } catch (erro) {
+    res.writeHead(500, { "Content-Type": "text/plain" });
+    res.end("Erro ao criar QR: " + erro.message);
+    return;
+  }
+}
   res.writeHead(404, { "Content-Type": "text/plain" });
   res.end("Nao encontrado");
 });
