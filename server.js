@@ -36,7 +36,13 @@ const server = http.createServer(async (req, res) => {
     res.end("Servidor PIX funcionando");
     return;
   }
-
+  
+if (req.method === "GET" && req.url === "/teste-acionar") {
+  acionamentoPendente = true;
+  res.writeHead(200, { "Content-Type": "text/plain" });
+  res.end("OK");
+  return;
+}
   // ESP32 consulta se existe acionamento pendente
   if (req.method === "GET" && req.url === "/esp32/check") {
     res.writeHead(200, { "Content-Type": "text/plain" });
