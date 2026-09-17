@@ -143,7 +143,7 @@ if (req.method === "GET" && req.url === "/esp32/confirm") {
     external_reference: referencia,
     config: {
       qr: {
-        external_pos_id: "455014639",
+        external_pos_id: "137110272",
         mode: "static"
       }
     },
