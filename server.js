@@ -188,7 +188,7 @@ if (req.method === "GET" && req.url === "/esp32/confirm") {
   if (req.method === "GET" && req.url === "/consultar-pos") {
   const token = process.env.MERCADO_PAGO_ACCESS_TOKEN;
 
-  const resposta = await fetch("https://api.mercadopago.com/pos?limit=100", {
+  const resposta = await fetch("https://api.mercadopago.com/v2/pos", {
     headers: {
       "Authorization": `Bearer ${token}`
     }
