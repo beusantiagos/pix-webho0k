@@ -190,7 +190,7 @@ if (req.method === "GET" && req.url === "/esp32/confirm") {
 
   const resposta = await fetch("https://api.mercadopago.com/v2/pos", {
     headers: {
-      "Authorization": `Bearer ${token}`
+      "Authorization": ´Bearer ${token}´
     }
   });
 
