@@ -184,6 +184,21 @@ if (req.method === "GET" && req.url === "/esp32/confirm") {
     return;
   }
 }
+
+  if (req.method === "GET" && req.url === "/consultar-pos") {
+  const token = process.env.MERCADO_PAGO_ACCESS_TOKEN;
+
+  const resposta = await fetch("https://api.mercadopago.com/pos?limit=100", {
+    headers: {
+      "Authorization": `Bearer ${token}`
+    }
+  });
+
+  const texto = await resposta.text();
+  res.writeHead(resposta.status, { "Content-Type": "application/json" });
+  res.end(texto);
+  return;
+}
   res.writeHead(404, { "Content-Type": "text/plain" });
   res.end("Nao encontrado");
 });
